@@ -43,19 +43,16 @@ class glassfish::install {
   # Take action based on $install_method.
   case $glassfish::install_method {
     'package' : {
-      # Build package from $package_prefix and $version
-      $package_name = "${glassfish::package_prefix}-${glassfish::version}"
-
       # Install the package.
-      package { $package_name:
-        ensure  => present,
+      package { $glassfish::package_prefix:
+        ensure  => $glassfish::version,
         require => Anchor['glassfish::install::start'],
         before  => Anchor['glassfish::install::end']
       }
 
       # Run User/Group create before Package install, If manage_accounts = true.
       if $glassfish::manage_accounts {
-        User[$glassfish::user] -> Package[$package_name]
+        User[$glassfish::user] -> Package[$glassfish::package_prefix]
       }
     }
     'zip'     : {
