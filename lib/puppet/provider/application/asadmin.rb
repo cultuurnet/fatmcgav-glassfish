@@ -39,6 +39,8 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "redeploy"
     args << "--name" << @resource[:name]
+    args << "--target" << @resource[:target] if @resource[:target]
+    args << "--contextroot" << @resource[:contextroot] if @resource[:contextroot]
     args << @resource[:source]
 
     asadmin_exec(args)
