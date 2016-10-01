@@ -5,9 +5,6 @@ Puppet::Type.newtype(:applicationref) do
 
   ensurable
 
-  # Array of resources we can reference
-  referenceable_resources = [:jdbcresource, :jmsresource, :javamailresource, :customresource]
-
   newparam(:name) do
     desc "The application resource name."
     isnamevar
