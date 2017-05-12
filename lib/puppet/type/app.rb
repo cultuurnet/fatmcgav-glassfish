@@ -27,6 +27,17 @@ Puppet::Type.newtype(:app) do
     desc "The application file to deploy."
   end
 
+  newparam(:precompilejsp) do
+    desc "The URL context root."
+
+    validate do |value|
+      unless [true, false].include? value
+         raise ArgumentError, "Value for precompilejsp is not a Boolean"
+      end
+    end
+    defaultto true
+  end
+
   newparam(:target) do
     desc "This option helps specify the target to which you  are deploying.
     Valid options are: server, domain, [cluster name], [instance name].

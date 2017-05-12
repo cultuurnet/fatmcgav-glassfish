@@ -6,7 +6,8 @@ Puppet::Provider::Asadmin) do
   desc "Glassfish application deployment support."
   def create
     args = Array.new
-    args << "deploy" << "--precompilejsp=true"
+    args << "deploy"
+    args << "--precompilejsp=true" if @resource[:precompilejsp]
     args << "--target" << @resource[:target] if @resource[:target]
     args << "--contextroot" << @resource[:contextroot] if @resource[:contextroot]
     args << "--name" << @resource[:name]
