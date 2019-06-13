@@ -26,6 +26,7 @@ Puppet::Type.newtype(:jvmoption) do
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
+    isnamevar
 
     validate do |value|
       raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
@@ -69,6 +70,12 @@ Puppet::Type.newtype(:jvmoption) do
          raise ArgumentError, "%s is not a valid user name." % value
       end
     end
+  end
+
+  def self.title_patterns
+    # This is the default title pattern for all types, except hard-wired to
+    # set only name.
+    [ [ /(.*)/m, [ [:option] ] ] ]
   end
 
   # Autorequire the user running command

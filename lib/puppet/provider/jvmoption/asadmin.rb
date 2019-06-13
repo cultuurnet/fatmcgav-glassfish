@@ -8,7 +8,7 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "create-jvm-options"
     args << "--target" << @resource[:target] if @resource[:target]
-    args << "'" + escape(@resource[:name]) + "'"
+    args << "'" + escape(@resource[:option]) + "'"
 
     asadmin_exec(args)
   end
@@ -17,7 +17,7 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "delete-jvm-options"
     args << "--target" << @resource[:target]
-    args << "'" + escape(@resource[:name]) + "'"
+    args << "'" + escape(@resource[:option]) + "'"
 
     asadmin_exec(args)
   end
@@ -28,7 +28,7 @@ Puppet::Provider::Asadmin) do
     args << "--target" << @resource[:target] if @resource[:target]
 
     #Remove escaped semi-colons and qoutes for matching the jvm option name
-    name = @resource[:name].sub "\\:" , ":"
+    name = @resource[:option].sub "\\:" , ":"
     name = name.gsub "\\\"" , "\""
 
     asadmin_exec(args).each do |line|
