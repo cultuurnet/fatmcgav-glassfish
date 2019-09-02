@@ -18,6 +18,18 @@ Puppet::Type.newtype(:jdbcconnectionpool) do
     desc "The resource type. Ex. javax.sql.ConnectionPoolDataSource"
   end
 
+  newparam(:wrapjdbcobjects) do
+    desc "Specifies whether the pooling infrastructure provides wrapped JDBC objects to applications."
+
+    validate do |value|
+      unless [true, false].include? value
+         raise ArgumentError, "Value for wrapjdbcobjects is not a Boolean"
+      end
+    end
+
+    defaultto false
+  end
+
   newparam(:properties) do
     desc "The properties. Ex. user=myuser:password=mypass:url=jdbc\:mysql\://myhost.ex.com\:3306/mydatabase"
   end
