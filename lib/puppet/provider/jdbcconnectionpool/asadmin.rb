@@ -10,7 +10,7 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
     args << "create-jdbc-connection-pool"
     args << "--datasourceclassname" << @resource[:dsclassname]
     args << "--restype" << @resource[:resourcetype]
-    args << "--wrapjdbcobjects" << @resource[:wrapjdbcobjects] if @resource[:wrapjdbcobjects]
+    args << "--wrapjdbcobjects" << @resource[:wrapjdbcobjects]
     if hasProperties? @resource[:properties]
       args << "--property"
       args << "\'#{prepareProperties @resource[:properties]}\'"
