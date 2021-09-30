@@ -88,6 +88,8 @@ define glassfish::create_service (
   # What service_file should we be using, based on osfamily.
   case $::osfamily {
     'RedHat' : {
+      $service_config_path   = "/etc/init.d/${svc_name}"
+      $service_config_notify = Service[$svc_name]
       case $mode {
         'domain'   : { $service_file = template('glassfish/glassfish-init-domain-el.erb') }
         'cluster'  : { $service_file = template('glassfish/glassfish-init-cluster-el.erb') }
@@ -96,7 +98,18 @@ define glassfish::create_service (
       }
     }
     'Debian' : {
-      $service_file = template('glassfish/glassfish-init-domain-debian.erb')
+      case $::lsbdistcodename {
+        'trusty', 'wheezy': {
+          $service_file          = template('glassfish/glassfish-init-domain-debian.erb')
+          $service_config_path   = "/etc/init.d/${svc_name}"
+          $service_config_notify = Service[$svc_name]
+        },
+        default: {
+          $service_file          = template('glassfish/glassfish-systemd-domain-deb.erb')
+          $service_config_path   = "/lib/systemd/system/${svc_name}.service"
+          $service_config_notify = [ Exec['reload-systemd'], Service[$svc_name]]
+        }
+      }
     }
     default  : {
       fail("OSFamily ${::osfamily} not supported.")
@@ -106,11 +119,17 @@ define glassfish::create_service (
   # Create the init file
   file { "${title}_servicefile":
     ensure  => present,
-    path    => "/etc/init.d/${svc_name}",
+    path    => $service_config_path,
     mode    => '0755',
     content => $service_file,
-    notify  => Service[$svc_name]
+    notify  => $service_config_notify
   }
+
+  exec { 'reload-systemd':
+￼   command     => 'systemctl daemon-reload',
+￼   path        => ['/bin'],
+￼   refreshonly => true,
+￼ }
 
   # Need to stop the domain if it was auto-started
   if $running {
