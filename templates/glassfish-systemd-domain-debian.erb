@@ -1,13 +1,13 @@
 [Unit]
-Description = GlassFish Server <%= scope.lookupvar('glassfish::version') %> - <%= @domain_name %>
-After = syslog.target network.target
+Description=GlassFish Server <%= scope.lookupvar('glassfish::version') %> - <%= @domain_name %>
+After=syslog.target network.target
 ￼
 [Service]
 User=<%= @runuser %>
-ExecStart = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile /home/glassfish/<%= @domain_name %>.pass start-domain <%= @domain_name %>
-ExecStop = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile /home/glassfish/<%= @domain_name %>.pass stop-domain <%= @domain_name %>
-ExecReload = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile /home/glassfish/<%= @domain_name %>.pass restart-domain <%= @domain_name %>
-Type = forking
+ExecStart=<%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile <%= scope.lookupvar('glassfish::asadmin_passfile') %> start-domain <%= @domain_name %>
+ExecStop=<%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile <%= scope.lookupvar('glassfish::asadmin_passfile') %> stop-domain <%= @domain_name %>
+ExecReload=<%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile <%= scope.lookupvar('glassfish::asadmin_passfile') %> restart-domain <%= @domain_name %>
+Type=forking
 
 [Install]
-WantedBy = multi-user.target
+WantedBy=multi-user.target
