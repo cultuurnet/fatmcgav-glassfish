@@ -105,7 +105,7 @@ define glassfish::create_service (
           $service_config_notify = Service[$svc_name]
         }
         default: {
-          $service_file          = template('glassfish/glassfish-systemd-domain-deb.erb')
+          $service_file          = template('glassfish/glassfish-systemd-domain-debian.erb')
           $service_config_path   = "/lib/systemd/system/${svc_name}.service"
           $service_config_notify = [ Exec['reload-systemd'], Service[$svc_name]]
         }
