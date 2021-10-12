@@ -107,7 +107,7 @@ define glassfish::create_service (
         default: {
           $service_file          = template('glassfish/glassfish-systemd-domain-debian.erb')
           $service_config_path   = "/lib/systemd/system/${svc_name}.service"
-          $service_config_notify = [ Exec['reload-systemd'], Service[$svc_name]]
+          $service_config_notify = [ Exec["reload-systemd for ${svc_name}"], Service[$svc_name]]
         }
       }
     }
@@ -125,11 +125,11 @@ define glassfish::create_service (
     notify  => $service_config_notify
   }
 
-  exec { 'reload-systemd':
-￼   command     => 'systemctl daemon-reload',
-￼   path        => ['/bin'],
-￼   refreshonly => true,
-￼ }
+  exec { "reload-systemd for ${svc_name}":
+    command     => 'systemctl daemon-reload',
+    path        => ['/bin'],
+    refreshonly => true
+  }
 
   # Need to stop the domain if it was auto-started
   if $running {
