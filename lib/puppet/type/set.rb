@@ -53,12 +53,6 @@ Puppet::Type.newtype(:set) do
 
   newparam(:passwordfile) do
     desc "The file containing the password for the user."
-
-    validate do |value|
-      unless File.exists? value
-        raise ArgumentError, "%s does not exists" % value
-      end
-    end
   end
 
   newparam(:user) do
