@@ -89,6 +89,7 @@ define glassfish::create_service (
   case $::osfamily {
     'RedHat' : {
       $service_config_path   = "/etc/init.d/${svc_name}"
+      $service_config_mode   = '0755'
       $service_config_notify = Service[$svc_name]
       case $mode {
         'domain'   : { $service_file = template('glassfish/glassfish-init-domain-el.erb') }
@@ -102,11 +103,13 @@ define glassfish::create_service (
         'trusty', 'wheezy': {
           $service_file          = template('glassfish/glassfish-init-domain-debian.erb')
           $service_config_path   = "/etc/init.d/${svc_name}"
+          $service_config_mode   = '0755'
           $service_config_notify = Service[$svc_name]
         }
         default: {
           $service_file          = template('glassfish/glassfish-systemd-domain-debian.erb')
           $service_config_path   = "/lib/systemd/system/${svc_name}.service"
+          $service_config_mode   = '0644'
           $service_config_notify = [ Exec["reload-systemd for ${svc_name}"], Service[$svc_name]]
         }
       }
@@ -120,7 +123,7 @@ define glassfish::create_service (
   file { "${title}_servicefile":
     ensure  => present,
     path    => $service_config_path,
-    mode    => '0755',
+    mode    => $service_config_mode,
     content => $service_file,
     notify  => $service_config_notify
   }
