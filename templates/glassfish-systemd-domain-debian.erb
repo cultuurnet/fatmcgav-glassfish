@@ -7,6 +7,9 @@ User=<%= @runuser %>
 ExecStart=<%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile <%= scope.lookupvar('glassfish::asadmin_passfile') %> start-domain <%= @domain_name %>
 ExecStop=<%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile <%= scope.lookupvar('glassfish::asadmin_passfile') %> stop-domain <%= @domain_name %>
 ExecReload=<%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin --passwordfile <%= scope.lookupvar('glassfish::asadmin_passfile') %> restart-domain <%= @domain_name %>
+TimeoutStopSec=300
+TimeoutStopSec=30
+RestartSec=20
 Type=forking
 
 [Install]
