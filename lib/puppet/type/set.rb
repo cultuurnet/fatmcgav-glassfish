@@ -7,7 +7,6 @@ Puppet::Type.newtype(:set) do
 
   newparam(:property) do
     desc "The property name."
-    isnamevar
 
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.=]+$/
