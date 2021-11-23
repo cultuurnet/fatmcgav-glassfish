@@ -5,13 +5,13 @@ Puppet::Type.newtype(:set) do
 
   ensurable
 
-  newparam(:name) do
-    desc "The attribute name."
+  newparam(:property) do
+    desc "The property name."
     isnamevar
 
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.=]+$/
-         raise ArgumentError, "%s is not a valid set attribute-name." % value
+         raise ArgumentError, "%s is not a valid set property name." % value
       end
     end
   end
@@ -89,7 +89,7 @@ Puppet::Type.newtype(:set) do
       next unless res.type == :domain
       res if res[:portbase] == self[:portbase]
     }.collect { |res|
-      res[:name]
+      res[:property]
     }
   end
 end
