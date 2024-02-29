@@ -7,6 +7,7 @@ Puppet::Type.newtype(:set) do
 
   newparam(:property) do
     desc "The property name."
+    isnamevar
 
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.=]+$/
@@ -88,7 +89,7 @@ Puppet::Type.newtype(:set) do
       next unless res.type == :domain
       res if res[:portbase] == self[:portbase]
     }.collect { |res|
-      res[:property]
+      res[:name]
     }
   end
 end
