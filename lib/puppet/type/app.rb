@@ -2,9 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
 Puppet::Type.newtype(:app) do
   @doc = "Manage applications of Glassfish domains"
-  ensurable do
-    defaultto(:present)
-  end
+  ensurable
 
   feature :refreshable, "The provider can redeploy the application",
     :methods => [:redeploy]
