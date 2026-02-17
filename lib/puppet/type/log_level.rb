@@ -10,7 +10,7 @@ Puppet::Type.newtype(:log_level) do
     isnamevar
 
     validate do |value|
-      unless value =~ /^[^\W]?[\w\-\.]+$/
+      unless value =~ /^[^\W]?[\w\-\.]*$/
          raise ArgumentError, "%s is not a valid log level name." % value
       end
     end
