@@ -14,7 +14,7 @@
 #
 # [*node_host*]
 #  Host to run this node on.
-#  Defaults to $::hostname.
+#  Defaults to $facts['networking']['hostname'].
 #
 # [*node_name*]
 #  Name of node to create.
@@ -54,7 +54,7 @@
 define glassfish::create_node (
   $asadmin_user     = $glassfish::asadmin_user,
   $asadmin_passfile = $glassfish::asadmin_passfile,
-  $node_host        = $::hostname,
+  $node_host        = $facts['networking']['hostname'],
   $node_name        = $name,
   $node_user        = $glassfish::user,
   $ensure           = present,
