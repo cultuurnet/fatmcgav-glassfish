@@ -86,7 +86,7 @@ define glassfish::create_service (
   }
 
   # What service_file should we be using, based on osfamily.
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat' : {
       $service_config_path   = "/etc/init.d/${svc_name}"
       $service_config_mode   = '0755'
@@ -99,7 +99,7 @@ define glassfish::create_service (
       }
     }
     'Debian' : {
-      case $::lsbdistcodename {
+      case $facts['os']['distro']['codename'] {
         'trusty', 'wheezy': {
           $service_file          = template('glassfish/glassfish-init-domain-debian.erb')
           $service_config_path   = "/etc/init.d/${svc_name}"
@@ -115,7 +115,7 @@ define glassfish::create_service (
       }
     }
     default  : {
-      fail("OSFamily ${::osfamily} not supported.")
+      fail("OSFamily ${facts['os']['family']} not supported.")
     }
   }
 

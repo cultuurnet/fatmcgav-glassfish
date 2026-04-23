@@ -19,7 +19,7 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish::path {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat' : {
       # Add a file to the profile.d directory
       file { '/etc/profile.d/glassfish.sh':
@@ -43,7 +43,7 @@ class glassfish::path {
       }
     }
     default  : {
-      fail("OSFamily ${::osfamily} is not currently supported.")
+      fail("OSFamily ${facts['os']['family']} is not currently supported.")
     }
   }
 
