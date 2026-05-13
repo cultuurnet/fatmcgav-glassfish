@@ -43,19 +43,16 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::create_cluster (
-  $asadmin_user          = $glassfish::asadmin_user,
-  $asadmin_passfile      = $glassfish::asadmin_passfile,
-  $cluster_name          = $name,
+  String $asadmin_user          = $glassfish::asadmin_user,
+  Stdlib::Absolutepath $asadmin_passfile      = $glassfish::asadmin_passfile,
+  String $cluster_name          = $name,
   $cluster_user          = $glassfish::user,
   $das_port              = '4848',
   $ensure                = present,
   Boolean $gms_enabled           = $glassfish::gms_enabled,
   $gms_multicast_port    = $glassfish::gms_multicast_port,
-  $gms_multicast_address = $glassfish::gms_multicast_address) {
-  # Validate params
-  validate_string($asadmin_user)
-  validate_absolute_path($asadmin_passfile)
-  validate_string($cluster_name)
+  $gms_multicast_address = $glassfish::gms_multicast_address
+) {
 
   # Create the cluster
   cluster { $cluster_name:

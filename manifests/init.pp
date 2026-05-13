@@ -90,34 +90,34 @@
 #
 class glassfish (
   Boolean $add_path                = $glassfish::params::glassfish_add_path,
-  $asadmin_user            = $glassfish::params::glassfish_asadmin_user,
-  $asadmin_passfile        = $glassfish::params::glassfish_asadmin_passfile,
+  String $asadmin_user            = $glassfish::params::glassfish_asadmin_user,
+  Stdlib::Absolutepath $asadmin_passfile        = $glassfish::params::glassfish_asadmin_passfile,
   $asadmin_master_password = $glassfish::params::glassfish_asadmin_master_password,
   $asadmin_password        = $glassfish::params::glassfish_asadmin_password,
   Boolean $create_domain           = $glassfish::params::glassfish_create_domain,
   Boolean $create_service          = $glassfish::params::glassfish_create_service,
   Boolean $create_passfile         = $glassfish::params::glassfish_create_passfile,
-  $domain_name             = $glassfish::params::glassfish_domain,
+  String $domain_name             = $glassfish::params::glassfish_domain,
   $domain_template         = $glassfish::params::glassfish_domain_template,
   $download_mirror         = undef,
   Boolean $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
   $gms_enabled             = $glassfish::params::glassfish_gms_enabled,
   $gms_multicast_port      = $glassfish::params::glassfish_multicast_port,
   $gms_multicast_address   = $glassfish::params::glassfish_multicast_address,
-  $group                   = $glassfish::params::glassfish_group,
+  String $group                   = $glassfish::params::glassfish_group,
   $install_dir             = $glassfish::params::glassfish_install_dir,
-  $install_method          = $glassfish::params::glassfish_install_method,
+  String $install_method          = $glassfish::params::glassfish_install_method,
   $java_ver                = $glassfish::params::glassfish_java_ver,
   Boolean $manage_accounts         = $glassfish::params::glassfish_manage_accounts,
   Boolean $manage_java             = $glassfish::params::glassfish_manage_java,
-  $package_prefix          = $glassfish::params::glassfish_package_prefix,
+  String $package_prefix          = $glassfish::params::glassfish_package_prefix,
   $parent_dir              = $glassfish::params::glassfish_parent_dir,
   $portbase                = $glassfish::params::glassfish_portbase,
   $remove_default_domain   = $glassfish::params::glassfish_remove_default_domain,
   $service_name            = $glassfish::params::glassfish_service_name,
   Boolean $start_domain            = $glassfish::params::glassfish_start_domain,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
-  $user                    = $glassfish::params::glassfish_user,
+  String $user                    = $glassfish::params::glassfish_user,
   $version                 = $glassfish::params::glassfish_version
   ) inherits glassfish::params {
   #
@@ -132,14 +132,6 @@ class glassfish (
 
   # Asadmin path
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
-
-  # Validate passed paramater values
-  validate_string($asadmin_user)
-  validate_string($domain_name)
-  validate_string($group)
-  validate_string($install_method)
-  validate_string($package_prefix)
-  validate_string($user)
 
 
   if $remove_default_domain and $create_domain {
@@ -196,9 +188,6 @@ class glassfish (
 
   # Do we need to create a domain on installation?
   if $create_domain {
-    # Validate params required for domain creation
-    validate_string($domain_name)
-    validate_absolute_path($asadmin_passfile)
 
     # Service name
     if ($service_name == undef) {
