@@ -52,15 +52,15 @@ define glassfish::create_domain (
   $asadmin_path        = $glassfish::glassfish_asadmin_path,
   $asadmin_user        = $glassfish::asadmin_user,
   $asadmin_passfile    = $glassfish::asadmin_passfile,
-  $create_service      = $glassfish::create_service,
+  Boolean $create_service      = $glassfish::create_service,
   $domain_name         = $name,
   $domain_template     = $glassfish::domain_template,
   $domain_user         = $glassfish::user,
-  $enable_secure_admin = $glassfish::enable_secure_admin,
+  Boolean $enable_secure_admin = $glassfish::enable_secure_admin,
   $ensure              = present,
   $portbase            = $glassfish::portbase,
   $service_name        = $glassfish::service_name,
-  $start_domain        = $glassfish::start_domain) {
+  Boolean $start_domain        = $glassfish::start_domain) {
   # Service name
   if ($service_name == undef) {
     $svc_name = "glassfish_${domain_name}"
@@ -73,9 +73,6 @@ define glassfish::create_domain (
   validate_string($asadmin_user)
   validate_absolute_path($asadmin_passfile)
   validate_string($portbase)
-  validate_bool($start_domain)
-  validate_bool($enable_secure_admin)
-  validate_bool($create_service)
 
   # Validate the domain_template if specified...
   if $domain_template {

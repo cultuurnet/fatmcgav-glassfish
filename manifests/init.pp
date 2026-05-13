@@ -89,18 +89,18 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish (
-  $add_path                = $glassfish::params::glassfish_add_path,
+  Boolean $add_path                = $glassfish::params::glassfish_add_path,
   $asadmin_user            = $glassfish::params::glassfish_asadmin_user,
   $asadmin_passfile        = $glassfish::params::glassfish_asadmin_passfile,
   $asadmin_master_password = $glassfish::params::glassfish_asadmin_master_password,
   $asadmin_password        = $glassfish::params::glassfish_asadmin_password,
-  $create_domain           = $glassfish::params::glassfish_create_domain,
-  $create_service          = $glassfish::params::glassfish_create_service,
-  $create_passfile         = $glassfish::params::glassfish_create_passfile,
+  Boolean $create_domain           = $glassfish::params::glassfish_create_domain,
+  Boolean $create_service          = $glassfish::params::glassfish_create_service,
+  Boolean $create_passfile         = $glassfish::params::glassfish_create_passfile,
   $domain_name             = $glassfish::params::glassfish_domain,
   $domain_template         = $glassfish::params::glassfish_domain_template,
   $download_mirror         = undef,
-  $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
+  Boolean $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
   $gms_enabled             = $glassfish::params::glassfish_gms_enabled,
   $gms_multicast_port      = $glassfish::params::glassfish_multicast_port,
   $gms_multicast_address   = $glassfish::params::glassfish_multicast_address,
@@ -108,14 +108,14 @@ class glassfish (
   $install_dir             = $glassfish::params::glassfish_install_dir,
   $install_method          = $glassfish::params::glassfish_install_method,
   $java_ver                = $glassfish::params::glassfish_java_ver,
-  $manage_accounts         = $glassfish::params::glassfish_manage_accounts,
-  $manage_java             = $glassfish::params::glassfish_manage_java,
+  Boolean $manage_accounts         = $glassfish::params::glassfish_manage_accounts,
+  Boolean $manage_java             = $glassfish::params::glassfish_manage_java,
   $package_prefix          = $glassfish::params::glassfish_package_prefix,
   $parent_dir              = $glassfish::params::glassfish_parent_dir,
   $portbase                = $glassfish::params::glassfish_portbase,
   $remove_default_domain   = $glassfish::params::glassfish_remove_default_domain,
   $service_name            = $glassfish::params::glassfish_service_name,
-  $start_domain            = $glassfish::params::glassfish_start_domain,
+  Boolean $start_domain            = $glassfish::params::glassfish_start_domain,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
   $version                 = $glassfish::params::glassfish_version
@@ -134,18 +134,10 @@ class glassfish (
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
 
   # Validate passed paramater values
-  validate_bool($add_path)
-  validate_bool($create_domain)
-  validate_bool($create_service)
-  validate_bool($create_passfile)
-  validate_bool($start_domain)
-  validate_bool($enable_secure_admin)
   validate_string($asadmin_user)
   validate_string($domain_name)
   validate_string($group)
   validate_string($install_method)
-  validate_bool($manage_accounts)
-  validate_bool($manage_java)
   validate_string($package_prefix)
   validate_string($user)
 

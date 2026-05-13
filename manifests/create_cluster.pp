@@ -49,18 +49,13 @@ define glassfish::create_cluster (
   $cluster_user          = $glassfish::user,
   $das_port              = '4848',
   $ensure                = present,
-  $gms_enabled           = $glassfish::gms_enabled,
+  Boolean $gms_enabled           = $glassfish::gms_enabled,
   $gms_multicast_port    = $glassfish::gms_multicast_port,
   $gms_multicast_address = $glassfish::gms_multicast_address) {
   # Validate params
   validate_string($asadmin_user)
   validate_absolute_path($asadmin_passfile)
   validate_string($cluster_name)
-
-  # Check boolean if provided
-  if $gms_enabled {
-    validate_bool($gms_enabled)
-  }
 
   # Create the cluster
   cluster { $cluster_name:
