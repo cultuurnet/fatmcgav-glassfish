@@ -97,7 +97,7 @@ class glassfish (
   Boolean $create_domain           = $glassfish::params::glassfish_create_domain,
   Boolean $create_service          = $glassfish::params::glassfish_create_service,
   Boolean $create_passfile         = $glassfish::params::glassfish_create_passfile,
-  String $domain_name             = $glassfish::params::glassfish_domain,
+  Optional[String] $domain_name             = $glassfish::params::glassfish_domain,
   $domain_template         = $glassfish::params::glassfish_domain_template,
   $download_mirror         = undef,
   Boolean $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
