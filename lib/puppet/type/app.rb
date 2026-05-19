@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-Puppet::Type.newtype(:application) do
+Puppet::Type.newtype(:app) do
   @doc = "Manage applications of Glassfish domains"
   ensurable
 
@@ -25,6 +25,17 @@ Puppet::Type.newtype(:application) do
 
   newparam(:source) do
     desc "The application file to deploy."
+  end
+
+  newparam(:precompilejsp) do
+    desc "The URL context root."
+
+    validate do |value|
+      unless [true, false].include? value
+         raise ArgumentError, "Value for precompilejsp is not a Boolean"
+      end
+    end
+    defaultto true
   end
 
   newparam(:target) do
@@ -67,7 +78,6 @@ Puppet::Type.newtype(:application) do
 
   newparam(:passwordfile) do
     desc "The file containing the password for the user."
-
   end
 
   newparam(:user) do

@@ -29,7 +29,7 @@
 #  Defaults to undef
 #
 # [*node_name*] - Name of node to associate instance with.
-#  Defaults to $::hostname
+#  Defaults to $facts['networking']['hostname']
 #
 # [*node_user*] - Username node is running under.
 #  Defaults to $glassfish::user
@@ -49,22 +49,19 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::create_instance (
-  $asadmin_user      = $glassfish::asadmin_user,
-  $asadmin_passfile  = $glassfish::asadmin_passfile,
+  String $asadmin_user      = $glassfish::asadmin_user,
+  Stdlib::Absolutepath $asadmin_passfile  = $glassfish::asadmin_passfile,
   $cluster           = undef,
   $create_service    = $glassfish::create_service,
   $das_host          = undef,
   $das_port          = '4848',
   $ensure            = present,
-  $instance_name     = $name,
+  String $instance_name     = $name,
   $instance_portbase = undef,
-  $node_name         = $::hostname,
+  $node_name         = $facts['networking']['hostname'],
   $node_user         = $glassfish::user,
-  $service_name      = $glassfish::service_name) {
-  # Validate params
-  validate_string($asadmin_user)
-  validate_absolute_path($asadmin_passfile)
-  validate_string($instance_name)
+  $service_name      = $glassfish::service_name
+) {
 
   # Service name
   if ($service_name == undef) {

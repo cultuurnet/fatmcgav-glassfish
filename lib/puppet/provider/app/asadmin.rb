@@ -1,12 +1,13 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
 
-Puppet::Type.type(:application).provide(:asadmin, :parent =>
+Puppet::Type.type(:app).provide(:asadmin, :parent =>
 Puppet::Provider::Asadmin) do
   desc "Glassfish application deployment support."
   def create
     args = Array.new
-    args << "deploy" << "--precompilejsp=true"
+    args << "deploy"
+    args << "--precompilejsp=true" if @resource[:precompilejsp]
     args << "--target" << @resource[:target] if @resource[:target]
     args << "--contextroot" << @resource[:contextroot] if @resource[:contextroot]
     args << "--name" << @resource[:name]
@@ -39,8 +40,6 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "redeploy"
     args << "--name" << @resource[:name]
-    args << "--target" << @resource[:target] if @resource[:target]
-    args << "--contextroot" << @resource[:contextroot] if @resource[:contextroot]
     args << @resource[:source]
 
     asadmin_exec(args)

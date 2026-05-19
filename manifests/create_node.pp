@@ -14,7 +14,7 @@
 #
 # [*node_host*]
 #  Host to run this node on.
-#  Defaults to $::hostname.
+#  Defaults to $facts['networking']['hostname'].
 #
 # [*node_name*]
 #  Name of node to create.
@@ -52,19 +52,16 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::create_node (
-  $asadmin_user     = $glassfish::asadmin_user,
-  $asadmin_passfile = $glassfish::asadmin_passfile,
-  $node_host        = $::hostname,
-  $node_name        = $name,
+  String $asadmin_user     = $glassfish::asadmin_user,
+  Stdlib::Absolutepath $asadmin_passfile = $glassfish::asadmin_passfile,
+  $node_host        = $facts['networking']['hostname'],
+  String $node_name        = $name,
   $node_user        = $glassfish::user,
   $ensure           = present,
   $das_host         = undef,
   $das_port         = '4848',
-  $login            = true) {
-  # Validate params
-  validate_string($asadmin_user)
-  validate_absolute_path($asadmin_passfile)
-  validate_string($node_name)
+  $login            = true
+) {
 
   # Create the cluster
   cluster_node { $node_name:

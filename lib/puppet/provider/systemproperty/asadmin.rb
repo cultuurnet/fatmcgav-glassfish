@@ -30,7 +30,7 @@ Puppet::Provider::Asadmin) do
     asadmin_exec(args).each do |line|
       if line.match(/^[^=]+=/)
         key, value = line.split("=")
-        return true if @resource[:name] == key
+        return true if @resource[:name] == key and @resource[:value] == value
       end
     end
     return false

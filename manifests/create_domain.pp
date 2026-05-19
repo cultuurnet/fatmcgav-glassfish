@@ -49,37 +49,23 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::create_domain (
-  $asadmin_path        = $glassfish::glassfish_asadmin_path,
-  $asadmin_user        = $glassfish::asadmin_user,
-  $asadmin_passfile    = $glassfish::asadmin_passfile,
-  $create_service      = $glassfish::create_service,
+  Stdlib::Absolutepath $asadmin_path        = $glassfish::glassfish_asadmin_path,
+  String $asadmin_user        = $glassfish::asadmin_user,
+  Stdlib::Absolutepath $asadmin_passfile    = $glassfish::asadmin_passfile,
+  Boolean $create_service      = $glassfish::create_service,
   $domain_name         = $name,
-  $domain_template     = $glassfish::domain_template,
+  Optional[Stdlib::Absolutepath] $domain_template     = $glassfish::domain_template,
   $domain_user         = $glassfish::user,
-  $enable_secure_admin = $glassfish::enable_secure_admin,
+  Boolean $enable_secure_admin = $glassfish::enable_secure_admin,
   $ensure              = present,
-  $portbase            = $glassfish::portbase,
+  String $portbase            = $glassfish::portbase,
   $service_name        = $glassfish::service_name,
-  $start_domain        = $glassfish::start_domain) {
+  Boolean $start_domain        = $glassfish::start_domain) {
   # Service name
   if ($service_name == undef) {
     $svc_name = "glassfish_${domain_name}"
   } else {
     $svc_name = $service_name
-  }
-
-  # Validate params
-  validate_absolute_path($asadmin_path)
-  validate_string($asadmin_user)
-  validate_absolute_path($asadmin_passfile)
-  validate_string($portbase)
-  validate_bool($start_domain)
-  validate_bool($enable_secure_admin)
-  validate_bool($create_service)
-
-  # Validate the domain_template if specified...
-  if $domain_template {
-    validate_absolute_path($domain_template)
   }
 
   # Create the domain

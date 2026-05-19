@@ -5,13 +5,13 @@ Puppet::Type.newtype(:set) do
 
   ensurable
 
-  newparam(:name) do
-    desc "The attribute name."
+  newparam(:property) do
+    desc "The property name."
     isnamevar
 
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.=]+$/
-         raise ArgumentError, "%s is not a valid set attribute-name." % value
+         raise ArgumentError, "%s is not a valid set property name." % value
       end
     end
   end
@@ -53,12 +53,6 @@ Puppet::Type.newtype(:set) do
 
   newparam(:passwordfile) do
     desc "The file containing the password for the user."
-
-    validate do |value|
-      unless File.exists? value
-        raise ArgumentError, "%s does not exists" % value
-      end
-    end
   end
 
   newparam(:user) do

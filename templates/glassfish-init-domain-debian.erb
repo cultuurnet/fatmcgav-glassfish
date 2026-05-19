@@ -1,17 +1,18 @@
 #! /bin/bash
 
 ### BEGIN INIT INFO
-# Provides:		glassfishv<%= scope.lookupvar('glassfish::glassfish_version') %>
+# Provides:		glassfishv<%= scope.lookupvar('glassfish::version') %>
 # Required-Start:	$network $local_fs $remote_fs
 # Required-Stop:
 # Default-Start:	2 3 4 5
 # Default-Stop:		0 1 6
-# Short-Description:	Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::glassfish_version') %>
+# Short-Description:	Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::version') %>
 ### END INIT INFO
 
 USER=<%= @runuser %>
+DOMAIN=<%= @domain_name %>
 GLASSFISHPATH=<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
-__NAME="Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::glassfish_version') %>"
+__NAME="Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::version') %>"
 
 test -x ${GLASSFISHPATH}/asadmin || exit 2
 
@@ -25,7 +26,7 @@ function procStart() {
 	fi
 	log_daemon_msg "Starting $__NAME"
 	_isOk=0
-	sudo -u $USER $GLASSFISHPATH/asadmin start-domain > /dev/null
+        sudo -u $USER $GLASSFISHPATH/asadmin start-domain $DOMAIN > /dev/null
 	if [[ $? -ne 0 ]]; then
 		_isOk=2
 	fi
@@ -41,7 +42,7 @@ function procStatus() {
 	fi
 	log_daemon_msg "Status for $__NAME"
 	_isOk=0
-	sudo -u $USER ${GLASSFISHPATH}/asadmin list-domains | grep run | grep -v not > /dev/null
+        sudo -u $USER ${GLASSFISHPATH}/asadmin list-domains | grep "^$DOMAIN " | grep run | grep -v not > /dev/null
 	if [[ $? -ne 0 ]]; then
 		_isOk=3
 	fi
@@ -55,9 +56,9 @@ function procStop() {
 		echo "This script must be run as root" 1>&2
 		exit 1
 	fi
-	log_daemon_msg "Stoping $__NAME"
+	log_daemon_msg "Stopping $__NAME"
 	_isOk=0
-	sudo -u $USER ${GLASSFISHPATH}/asadmin stop-domain > /dev/null
+	sudo -u $USER ${GLASSFISHPATH}/asadmin stop-domain $DOMAIN > /dev/null
 	if [[ $? -ne 0 ]]; then
 		_isOk=3
 	fi

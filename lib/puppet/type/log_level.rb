@@ -1,30 +1,24 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-Puppet::Type.newtype(:application) do
-  @doc = "Manage applications of Glassfish domains"
+Puppet::Type.newtype(:log_level) do
+  @doc = "Manage log levels of Glassfish domains"
+
   ensurable
 
-  feature :refreshable, "The provider can redeploy the application",
-    :methods => [:redeploy]
-
   newparam(:name) do
-    desc "The application name."
+    desc "The log level name."
     isnamevar
 
     validate do |value|
-      unless value =~ /^[\w\-\.]+$/
-         raise ArgumentError, "%s is not a valid application name." % value
+      unless value =~ /^[^\W]?[\w\-\.]*$/
+         raise ArgumentError, "%s is not a valid log level name." % value
       end
     end
   end
 
-  newparam(:contextroot) do
-    desc "The URL context root."
-    #defaultto ""
-  end
-
-  newparam(:source) do
-    desc "The application file to deploy."
+  newparam(:value) do
+    desc "The log level value."
+    #TODO: Add validation
   end
 
   newparam(:target) do
@@ -32,6 +26,7 @@ Puppet::Type.newtype(:application) do
     Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
+    #TODO: Validate
   end
 
   newparam(:portbase) do
@@ -67,7 +62,6 @@ Puppet::Type.newtype(:application) do
 
   newparam(:passwordfile) do
     desc "The file containing the password for the user."
-
   end
 
   newparam(:user) do
@@ -85,14 +79,7 @@ Puppet::Type.newtype(:application) do
 
   # Validate mandatory params
   validate do
-    raise Puppet::Error, 'Source is required.' if self[:source].nil? and self[:ensure] == :present
-  end
-
-  # Redeploy the application on a refresh signal
-  def refresh
-    if self[:ensure] == :present and provider.exists? then
-      provider.redeploy
-    end
+    raise Puppet::Error, 'Value is required.' unless self[:value]
   end
 
   # Autorequire the user running command
@@ -100,12 +87,12 @@ Puppet::Type.newtype(:application) do
     self[:user]
   end
 
-  # Autorequire the source application file
+  # Autorequire the password file
   autorequire(:file) do
-    self[:source]
+    self[:passwordfile]
   end
 
-  # Autorequire the domain resource, based on portbase
+  # Autorequire the relevant domain
   autorequire(:domain) do
     self.catalog.resources.select { |res|
       next unless res.type == :domain

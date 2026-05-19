@@ -78,7 +78,7 @@ class glassfish::params {
   $glassfish_domain_template     = undef
 
   # Should the path be updated?
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat'  : { $glassfish_add_path = true }
     'Debian'  : { $glassfish_add_path = true }
     default : { $glassfish_add_path = false }
@@ -90,7 +90,7 @@ class glassfish::params {
   $glassfish_java_ver    = 'java-7-openjdk'
 
   # Set package names based on Operating System...
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat' : {
       $java6_openjdk_package = 'java-1.6.0-openjdk-devel'
       $java6_sun_package     = undef
@@ -104,7 +104,7 @@ class glassfish::params {
       $java7_sun_package     = undef
     }
     default : {
-      fail("${::osfamily} not supported by this module.")
+      fail("${facts['os']['family']} not supported by this module.")
     }
   }
 

@@ -54,20 +54,12 @@ define glassfish::create_network_listener (
   $enabled           = true,
   $jkenabled         = false,
   $target            = server,
-  $asadmin_path      = $glassfish::glassfish_asadmin_path,
-  $asadmin_user      = $glassfish::asadmin_user,
-  $asadmin_passfile  = $glassfish::asadmin_passfile,
-  $portbase          = $glassfish::portbase,
-  $user              = $glassfish::user
+  Stdlib::Absolutepath $asadmin_path      = $glassfish::glassfish_asadmin_path,
+  String $asadmin_user      = $glassfish::asadmin_user,
+  Stdlib::Absolutepath $asadmin_passfile  = $glassfish::asadmin_passfile,
+  String $portbase          = $glassfish::portbase,
+  String $user              = $glassfish::user
 ) {
-
-  # Validate params
-  # The others will be validated by the type
-  validate_absolute_path($asadmin_path)
-  validate_string($asadmin_user)
-  validate_absolute_path($asadmin_passfile)
-  validate_string($portbase)
-  validate_string($user)
 
   # Create
   networklistener { $name:

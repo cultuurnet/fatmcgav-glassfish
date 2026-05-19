@@ -31,18 +31,18 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::install_jars (
-  $domain_name      = undef,
-  $download         = false,
-  $install_location = 'installation',
-  $service_name     = undef,
-  $source           = '') {
+  Optional[String] $domain_name      = undef,
+  Boolean          $download         = false,
+  String           $install_location = 'installation',
+  Optional[String] $service_name     = undef,
+  String           $source           = ''
+) {
   # Set some required vars
   $jaraddress = $name
   $jar        = basename($jaraddress)
 
   # Check domain name if install_location = 'domain'
   if ($install_location == 'domain') {
-    validate_string($domain_name)
 
     # Set $service.
     if ($service_name == undef) {

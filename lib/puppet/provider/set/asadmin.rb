@@ -8,7 +8,7 @@ Puppet::Type.type(:set).provide(:asadmin, :parent =>
   def create
     args = Array.new
     args << 'set'
-    args << "#{@resource[:name]}=#{@resource[:value]}"
+    args << "#{@resource[:property]}=#{@resource[:value]}"
     asadmin_exec(args)
   end
 
@@ -18,8 +18,8 @@ Puppet::Type.type(:set).provide(:asadmin, :parent =>
 
   def exists?
     begin
-      asadmin_exec(["get #{@resource[:name]}"]).each do |line|
-        return true if "#{@resource[:name]}=#{@resource[:value]}" == line.chomp
+      asadmin_exec(["get #{@resource[:property]}"]).each do |line|
+        return true if "#{@resource[:property]}=#{@resource[:value]}" == line.chomp
       end
       return false
     rescue Exception => msg

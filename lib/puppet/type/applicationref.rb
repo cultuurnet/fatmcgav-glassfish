@@ -1,30 +1,19 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-Puppet::Type.newtype(:application) do
-  @doc = "Manage applications of Glassfish domains"
+Puppet::Type.newtype(:applicationref) do
+  @doc = "Manage application references for Glassfish domains"
+
   ensurable
 
-  feature :refreshable, "The provider can redeploy the application",
-    :methods => [:redeploy]
-
   newparam(:name) do
-    desc "The application name."
+    desc "The application resource name."
     isnamevar
 
     validate do |value|
-      unless value =~ /^[\w\-\.]+$/
-         raise ArgumentError, "%s is not a valid application name." % value
+      unless value =~ /^\w+[\w=\-\/.]*$/
+         raise ArgumentError, "%s is not a valid application reference name." % value
       end
     end
-  end
-
-  newparam(:contextroot) do
-    desc "The URL context root."
-    #defaultto ""
-  end
-
-  newparam(:source) do
-    desc "The application file to deploy."
   end
 
   newparam(:target) do
@@ -32,6 +21,7 @@ Puppet::Type.newtype(:application) do
     Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
+
   end
 
   newparam(:portbase) do
@@ -83,33 +73,34 @@ Puppet::Type.newtype(:application) do
     end
   end
 
-  # Validate mandatory params
-  validate do
-    raise Puppet::Error, 'Source is required.' if self[:source].nil? and self[:ensure] == :present
-  end
-
-  # Redeploy the application on a refresh signal
-  def refresh
-    if self[:ensure] == :present and provider.exists? then
-      provider.redeploy
-    end
-  end
-
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]
   end
 
-  # Autorequire the source application file
+  # Autorequire the password file
   autorequire(:file) do
-    self[:source]
+    self[:passwordfile]
   end
 
-  # Autorequire the domain resource, based on portbase
+  # Autorequire the relevant domain
   autorequire(:domain) do
     self.catalog.resources.select { |res|
       next unless res.type == :domain
       res if res[:portbase] == self[:portbase]
+    }.collect { |res|
+      res[:name]
+    }
+  end
+
+  # Autorequire the relevant application
+  autorequire(:application) do
+    catalog.resources.select { |res|
+      # Skip it if we're not interested in it...
+      next unless res.type == :application
+
+      # Match on resource name...
+      res if res[:name] == self[:name]
     }.collect { |res|
       res[:name]
     }
